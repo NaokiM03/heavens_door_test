@@ -1,0 +1,38 @@
+version: "3"
+services:
+  db:
+    image: mysql:5.7.22
+    container_name: heavens_door_db
+    environment:
+      MYSQL_DATABASE: heavens_door
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    networks:
+      - default
+    ports:
+      - '5306:3306'
+    volumes:
+      - mysql-data:/var/lib/mysql
+  web:
+    build: .
+    container_name: heavens_door_web
+    environment:
+      TZ: 'Asia/Tokyo'
+      RAILS_ENV: development
+      BUNDLER_EDITOR: vim
+      MYSQL_HOST: db
+      MYSQL_USERNAME: root
+      MYSQL_DATABASE: heavens_door
+      MYSQL_PORT: 3306
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/app
+      - ./vendor/bundle:/usr/local/bundle
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    stdin_open: true
+    tty: true
+volumes:
+  mysql-data:
+    driver: local
