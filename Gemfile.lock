@@ -177,7 +177,7 @@ PLATFORMS
 
 DEPENDENCIES
   byebug
-  capybara (~> 2.13)
+  capybara (>= 2.15)
   coffee-rails (~> 4.2)
   heavens_door
   jbuilder (~> 2.5)
